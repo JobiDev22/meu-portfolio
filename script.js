@@ -5,46 +5,30 @@ let intervaloAnimacao = null;
 
 function trocarPalavra() {
     const elemento = document.querySelector('.palavra-animada');
-    if (!elemento) {
-        console.log('Elemento .palavra-animada não encontrado');
-        return;
-    }
-    
-    console.log('Trocando palavra para:', palavrasAnimadas[palavraAtual]);
-    console.log('Elemento atual:', elemento.textContent);
-    
-    // Força a mudança imediata primeiro
-    elemento.textContent = palavrasAnimadas[palavraAtual];
-    
+    if (!elemento) return;
+
     // Fade out
+    elemento.style.transition = 'opacity 0.5s, transform 0.5s';
     elemento.style.opacity = '0';
     elemento.style.transform = 'translateY(-20px)';
-    
+
     setTimeout(() => {
+        // Troca o texto quando estiver invisível
+        palavraAtual = (palavraAtual + 1) % palavrasAnimadas.length;
+        elemento.textContent = palavrasAnimadas[palavraAtual];
         // Fade in
         elemento.style.opacity = '1';
         elemento.style.transform = 'translateY(0)';
-        
-        // Próxima palavra
-        palavraAtual = (palavraAtual + 1) % palavrasAnimadas.length;
     }, 500);
 }
 
 function iniciarAnimacao() {
     const elemento = document.querySelector('.palavra-animada');
-    if (!elemento) {
-        console.log('Elemento .palavra-animada não encontrado na inicialização');
-        return;
-    }
-    
-    console.log('Iniciando animação...');
-    
-    // Configura a primeira palavra
+    if (!elemento) return;
     elemento.textContent = palavrasAnimadas[0];
     elemento.style.opacity = '1';
     elemento.style.transform = 'translateY(0)';
-    
-    // Inicia o intervalo de animação
+    clearInterval(intervaloAnimacao);
     intervaloAnimacao = setInterval(trocarPalavra, 4000);
 }
 
